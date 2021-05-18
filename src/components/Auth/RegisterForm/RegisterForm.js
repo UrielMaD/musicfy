@@ -1,9 +1,63 @@
 import React from "react";
+import { Botton, Icon, Form, Input, Button } from "semantic-ui-react";
+import firebase from "../../../utils/Firebase";
+import "firebase/auth";
 
-export default function RegisterForm(){
+import "./RegisterForm.scss";
+
+export default function RegisterForm(props){
+    const { setSelectedForm } = props;
+
+    const onSubmit = () => {
+        console.log("Formulario enviado")
+    };
+
     return (
-        <div>
-            <h1>Login Form....</h1>
+        <div className="register-form">
+            <h1>Empieza a escuchar con una cuenta de Musicfy gratis</h1>
+            <Form onSubmit={onSubmit}>
+                <Form.Field>
+                   <Input 
+                    type="text"
+                    name="email"
+                    placeholder="Correo electronico"
+                    icon="mail outline"
+                    // onChange=()
+                    // error={}
+
+                   /> 
+                </Form.Field>
+                <Form.Field>
+                   <Input 
+                    type="password"
+                    name="password"
+                    placeholder="Contrasena"
+                    icon="eye"
+                    // onChange=()
+                    // error={}
+                    
+                   /> 
+                </Form.Field><Form.Field>
+                   <Input 
+                    type="text"
+                    name="name"
+                    placeholder="Nombre"
+                    icon="user circle outline"
+                    // onChange=()
+                    // error={}
+                    
+                   /> 
+                </Form.Field>
+                <Button type="submit">
+                    Continuar
+                </Button>
+            </Form>
+            <div className="register-form__options">
+                    <p>Volvre</p>
+                    <p>Ya tienes Musicfy? <span>Iniciar sesion</span>
+                    </p>
+                    
+            </div>
         </div>
     )
 };
