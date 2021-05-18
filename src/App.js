@@ -9,7 +9,7 @@ function App() {
 
   firebase.auth().onAuthStateChanged(currentUser => {
     if(!currentUser) {
-      setUser(true);
+      setUser(null);
     } else {
       setUser(currentUser)
     };
