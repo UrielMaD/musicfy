@@ -1,5 +1,5 @@
-import React from "react";
-import { Botton, Icon, Form, Input, Button } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Icon, Form, Input, Button } from "semantic-ui-react";
 import firebase from "../../../utils/Firebase";
 import "firebase/auth";
 
@@ -7,6 +7,7 @@ import "./RegisterForm.scss";
 
 export default function RegisterForm(props){
     const { setSelectedForm } = props;
+    const [formData, setFormData] = useState(null)
 
     const onSubmit = () => {
         console.log("Formulario enviado")
@@ -14,7 +15,7 @@ export default function RegisterForm(props){
 
     return (
         <div className="register-form">
-            <h1>Empieza a escuchar con una cuenta de Musicfy gratis</h1>
+            <h3>Empieza a escuchar con una cuenta de Musicfy gratis</h3>
             <Form onSubmit={onSubmit}>
                 <Form.Field>
                    <Input 
@@ -53,8 +54,8 @@ export default function RegisterForm(props){
                 </Button>
             </Form>
             <div className="register-form__options">
-                    <p>Volvre</p>
-                    <p>Ya tienes Musicfy? <span>Iniciar sesion</span>
+                    <p onClick={() => setSelectedForm(null)}>Volver</p>
+                    <p>Ya tienes Musicfy? <span onClick={() => setSelectedForm("login")}>Iniciar sesion</span>
                     </p>
                     
             </div>
