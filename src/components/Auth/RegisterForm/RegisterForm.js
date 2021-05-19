@@ -7,34 +7,51 @@ import "./RegisterForm.scss";
 
 export default function RegisterForm(props){
     const { setSelectedForm } = props;
-    const [formData, setFormData] = useState(null)
+    const [formData, setFormData] = useState(defaultValueForm)
+    const [showPassword, setShowPassword] = useState(false)
 
     const onSubmit = () => {
         console.log("Formulario enviado")
+        console.log(formData)
     };
+
+    const handlerShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+
+    const onChange = e => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
+    }
 
     return (
         <div className="register-form">
             <h3>Empieza a escuchar con una cuenta de Musicfy gratis</h3>
-            <Form onSubmit={onSubmit}>
+            <Form onSubmit={onSubmit} onChange={onChange}>
                 <Form.Field>
                    <Input 
                     type="text"
                     name="email"
                     placeholder="Correo electronico"
                     icon="mail outline"
-                    // onChange=()
                     // error={}
 
                    /> 
                 </Form.Field>
                 <Form.Field>
                    <Input 
-                    type="password"
+                    type={showPassword ? "text": "password"}
                     name="password"
                     placeholder="Contrasena"
-                    icon="eye"
-                    // onChange=()
+                    icon={
+                        showPassword ? (
+                            <Icon name="eye slash outline" link onClick={handlerShowPassword} />
+                        ) : (
+                            <Icon name="eye" link onClick={handlerShowPassword} />
+                        )
+                    }
                     // error={}
                     
                    /> 
@@ -44,7 +61,6 @@ export default function RegisterForm(props){
                     name="name"
                     placeholder="Nombre"
                     icon="user circle outline"
-                    // onChange=()
                     // error={}
                     
                    /> 
@@ -61,4 +77,12 @@ export default function RegisterForm(props){
             </div>
         </div>
     )
+};
+
+function defaultValueForm() {
+    return {
+        email: "",
+        password: "",
+        username: ""
+    }
 };
