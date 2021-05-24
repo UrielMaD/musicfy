@@ -32,7 +32,19 @@ export default function RegisterForm(props){
         }
         setFormError(errors);
         if(formOk) {
-            console.log("Formulario valido");
+            setIsLoading(true);
+            firebase.auth().createUserWithEmailAndPassword(
+                formData.email,
+                formData.password
+            ).then(() =>{
+                console.log("Registro completado");
+            }).catch(() =>{
+                console.log("Error al crear la cuenta");
+            }).finally(() => {
+                setIsLoading(false);
+                setSelectedForm(null);
+            });
+
         }
     };
 
@@ -99,7 +111,7 @@ export default function RegisterForm(props){
                        </span>
                    )}
                 </Form.Field>
-                <Button type="submit">
+                <Button type="submit" loading={isLoading}>
                     Continuar
                 </Button>
             </Form>
