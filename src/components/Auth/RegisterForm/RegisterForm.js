@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Icon, Form, Input, Button } from "semantic-ui-react";
+import { toast } from 'react-toastify';
 import { validateEmail } from "../../../utils/Validations"
 import firebase from "../../../utils/Firebase";
 import "firebase/auth";
@@ -39,7 +40,7 @@ export default function RegisterForm(props){
             ).then(() =>{
                 console.log("Registro completado");
             }).catch(() =>{
-                console.log("Error al crear la cuenta");
+                toast.error("Error al crear la cuenta.");
             }).finally(() => {
                 setIsLoading(false);
                 setSelectedForm(null);
