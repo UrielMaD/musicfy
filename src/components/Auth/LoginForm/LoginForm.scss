@@ -1,10 +1,14 @@
 @import "../../../scss/index.scss";
 
-.register-form {
+.login-form {
     margin-top: 50px;
-    text-align: center;
-    font-size: 25px;
-    padding-bottom: 20px;
+
+    h1 {
+        color: $font-light;
+        text-align: center;
+        font-size: 35px;
+        padding-bottom: 20px;
+    }
 
     .ui.form {
         .field {
@@ -55,6 +59,20 @@
         }
     }
 
+    .rensend-verification-email {
+        color: $font-light;
+        padding: 20px 20px 0 20px;
+        text-align: center;
+
+        span {
+            color: $primary-color;
+            font-weight: bold;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+
     &__options{
         margin-top: 50px;
         color: $font-light;
@@ -85,5 +103,4 @@
             }
         }
     }
-
 }
