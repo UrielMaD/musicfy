@@ -39,6 +39,8 @@ export default function RegisterForm(props){
                 formData.password
             ).then(() =>{
                 console.log("Registro completado");
+                changeUserName();
+                sendVerificationEmail();
             }).catch(() =>{
                 toast.error("Error al crear la cuenta.");
             }).finally(() => {
@@ -48,6 +50,22 @@ export default function RegisterForm(props){
 
         }
     };
+
+    const changeUserName = () => {
+        firebase.auth().currentUser.updateProfile({
+            displayName: formData.username
+        }).catch(() => {
+            toast.error("Error al asignar el nombre del usuario.")
+        })
+    }
+
+    const sendVerificationEmail = () => {
+        firebase.auth().currentUser.sendEmailVerification().then(() =>{
+            toast.success("Se ha enviado un email de verificacion.")
+        }).catch(() => {
+            toast.error("Error al enviar email de verificacion.")
+        })
+    }
 
     const handlerShowPassword = () => {
         setShowPassword(!showPassword)

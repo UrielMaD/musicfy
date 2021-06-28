@@ -9,11 +9,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   firebase.auth().onAuthStateChanged(currentUser => {
-    if(!currentUser) {
+    console.log(currentUser);
+
+    if(!currentUser?.emailVerified) {
+      firebase.auth().signOut();
       setUser(null);
-    } else {
-      setUser(currentUser)
-    };
+    } else{
+      setUser(currentUser);
+    }
     setIsLoading(false);
   });
 
@@ -42,9 +45,10 @@ function App() {
 
 function UserLogged() {
 
+  /*
   const logout = () => {
     firebase.auth().signOut();
-  };
+  };*/
 
   return (
     <div 
