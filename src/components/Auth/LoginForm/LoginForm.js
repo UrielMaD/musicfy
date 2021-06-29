@@ -9,15 +9,25 @@ import "./LoginForm.scss";
 
 export default function LoginForm(props){
     const { setSelectedForm } = props;
+    const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState(defaultValueForm())
 
     const onSubmit = () => {
         console.log("Login..");
+        console.log(formData);
+    }
+
+    const onChange = e => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        })
     }
 
     return (
         <div className="login-form">
             <h1>Musica para todos</h1>
-            <Form onSubmit={onSubmit} >
+            <Form onSubmit={onSubmit} onChange={onChange}>
                 <Form.Field>
                     <Input 
                         type="text"
@@ -29,11 +39,25 @@ export default function LoginForm(props){
                 </Form.Field>
                 <Form.Field>
                     <Input 
-                        type="password"
+                        type={showPassword ? "text": "password"}
                         name="password"
                         placeholder="Contraseña"
-                        icon="eye"
                         // error={}
+                        icon={
+                            showPassword ? (
+                                <Icon
+                                    name="eye slash outline"
+                                    link
+                                    onClick={() => setShowPassword(!showPassword)}
+                                />
+                            ) : (
+                                <Icon
+                                    name="eye"
+                                    link
+                                    onClick={() => setShowPassword(!showPassword)}
+                                />
+                            )
+                        }
                     />
                 </Form.Field>
                 <Button type="submit">
@@ -51,3 +75,10 @@ export default function LoginForm(props){
         </div>
     )
 };
+
+function defaultValueForm () {
+    return {
+        email: "",
+        password: ""
+    }
+}
