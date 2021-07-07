@@ -13,8 +13,8 @@ export default function LoginForm(props){
     const [formData, setFormData] = useState(defaultValueForm());
     const [formError, setFormError] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const [userActive, setUserActive] = useState(false);
-    const [user, serUser] = useState(null);
+    const [userActive, setUserActive] = useState(true);
+    const [user, setUser] = useState(null);
 
     const onSubmit = () => {
         setFormError({});
@@ -32,7 +32,22 @@ export default function LoginForm(props){
         setFormError(errors);
 
         if(formOk) {
-            console.log("Login correcto")
+            setIsLoading(true);
+            firebase.auth()
+            .signInWithEmailAndPassword(formData.email, formData.password)
+            .then(response => {
+                setUser(response.user);
+                setUserActive(response.user.emailVerified);
+                if(!response.user.emailVerified){
+                    toast.warning("Para poder hacer login antes tienes que verificar la cuenta!");
+                }
+            })
+            .catch(err => {
+                handleErrors(err.code);
+            })
+            .finally(() =>{
+                setIsLoading(false);
+            })
         }
     }
 
@@ -89,10 +104,18 @@ export default function LoginForm(props){
                         </span>
                     )}
                 </Form.Field>
-                <Button type="submit">
+                <Button type="submit" loading={isLoading}>
                     Iniciar Sesion
                 </Button>
             </Form>
+
+            {!userActive && (
+                <ButtonResetSendEmailVerification 
+                    user={user}
+                    setIsLoading={setIsLoading}
+                    setUserActive={setUserActive}
+                />
+            )}
 
             <div className="login-form__options">
                 <p onClick={() => setSelectedForm(null)}>Volver</p>
@@ -104,6 +127,52 @@ export default function LoginForm(props){
         </div>
     )
 };
+
+
+function ButtonResetSendEmailVerification(props) {
+    const { user, setIsLoading, setUserActive } = props;
+
+    const resendVerificationEmail = () => {
+        user.resendVerificationEmail().then(() => {
+            toast.success("Se ha enviado el email de verificacion.");
+        })
+        .catch(err => {
+            handleErrors(err.code)
+        })
+        .finally(() => {
+            setIsLoading(false);
+            setUserActive(true);
+        })
+    }
+
+        return (
+            <div className="rensend-verification-email">
+                <p>
+                    Si no has recibido el email de verificacion puedes volver a enviarlo
+                    haciendo click <span onClick={resendVerificationEmail}>aqui.</span>
+                </p>
+
+            </div>
+        )
+}
+
+
+const handleErrors = code => {
+    switch(code) {
+        case "auth/wrong-password":
+            toast.warning("El usuario o la contrasena son incorrectos");
+            break;
+        case "auth/too-many-request":
+            toast.warning("Has enviado demasiadas solicitudes de renvio de email de confirmacion en muy poco tiempo");
+            break;
+        case "auth/user-not-found":
+            toast.warning("El usuario o la contrasena son incorrectos");
+            break;
+        default:
+            break;
+    }
+}
+
 
 function defaultValueForm () {
     return {
