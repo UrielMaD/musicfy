@@ -10,11 +10,30 @@ import "./LoginForm.scss";
 export default function LoginForm(props){
     const { setSelectedForm } = props;
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState(defaultValueForm())
+    const [formData, setFormData] = useState(defaultValueForm());
+    const [formError, setFormError] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [userActive, setUserActive] = useState(false);
+    const [user, serUser] = useState(null);
 
     const onSubmit = () => {
-        console.log("Login..");
-        console.log(formData);
+        setFormError({});
+        let errors = {};
+        let formOk = {};
+
+        if(!validateEmail(formData.email)) {
+            errors.email = true;
+            formOk = false;
+        }
+        if(formData.password.length < 6) {
+            errors.password = true;
+            formOk = false;
+        }
+        setFormError(errors);
+
+        if(formOk) {
+            console.log("Login correcto")
+        }
     }
 
     const onChange = e => {
@@ -34,15 +53,20 @@ export default function LoginForm(props){
                         name="email"
                         placeholder="Correo electronico"
                         icon="mail outline"
-                        // error={}
+                        error={formError.email}
                     />
+                    {formError.email && (
+                        <span style={{ color: 'white' }}>
+                            Por favor, introduce un correo electrónico válido
+                        </span>
+                    )}
                 </Form.Field>
                 <Form.Field>
                     <Input 
                         type={showPassword ? "text": "password"}
                         name="password"
                         placeholder="Contraseña"
-                        // error={}
+                        error={formError.password}
                         icon={
                             showPassword ? (
                                 <Icon
@@ -59,6 +83,11 @@ export default function LoginForm(props){
                             )
                         }
                     />
+                    {formError.password && (
+                        <span style={{ color: 'white' }}>
+                            Por favor, elige una Contraseña superior a 5 caracteres.
+                        </span>
+                    )}
                 </Form.Field>
                 <Button type="submit">
                     Iniciar Sesion
